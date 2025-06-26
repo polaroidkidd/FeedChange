@@ -11,7 +11,7 @@
 	"license": "MIT",
 	"scripts": {
 		"dev": "pnpm db:push:dev && dotenv -e .env.local -- vite dev --host",
-		"build": "pnpm clean && pnpm db:generate:prod && vite build --mode production",
+		"build": "pnpm clean && vite build --mode production",
 		"preview": "pnpm build && wrangler pages dev ./.svelte-kit/cloudflare",
 		"clean": "rimraf dist .svelte-kit",
 		"prepare": "husky",
@@ -88,23 +88,10 @@
 	},
 	"pnpm": {
 		"onlyBuiltDependencies": [
-			"@prisma/client",
-			"@prisma/engines",
-			"@tailwindcss/oxide",
-			"esbuild",
-			"prisma"
+			"esbuild"
 		],
 		"patchedDependencies": {
 			"flowbite-svelte": "patches/flowbite-svelte.patch"
-		},
-		"ignoredBuiltDependencies": [
-			"sharp",
-			"workerd"
-		]
-	},
-	"packageManager": "pnpm@10.12.4",
-	"engines": {
-		"node": ">=v22.9.0",
-		"pnpm": ">=10.12.4"
+		}
 	}
 }
