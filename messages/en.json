@@ -1,0 +1,138 @@
+{
+	"$schema": "https://inlang.com/schema/inlang-message-format",
+	"app": {
+		"accept": "Accept",
+		"decline": "Decline",
+		"save": "Save",
+		"cancel": "Cancel",
+		"error": {
+			"title": "Error",
+			"body": "Something went wrong. Please try again later."
+		}
+	},
+	"baby": {
+		"create": {
+			"log": "Start",
+			"name": "Name",
+			"weight": "Weight (g)",
+			"currentBottleSize": "Current bottle size (ml)"
+		},
+		"actions": {
+			"fed": {
+				"amount": "Drank (ml)",
+				"create": "Create feed entry",
+				"hasBeen": "{name} has been fed",
+				"drank": "drank {amount}/{bottleSize}ml",
+				"feeding": "Feeding {name}"
+			},
+			"diapered": {
+				"create": "Create diaper change entry",
+				"hasBeen": "{name} has fresh diapers"
+			}
+		},
+		"history": {
+			"fed": "Last feeding",
+			"diapered": "Last diaper change"
+		},
+		"stats": {
+			"title": "Statistics",
+			"totalConsumed": "Total Consumed",
+			"averageBottleSize": "Avg. Bottle Size",
+			"emptyBottles": "Empty Bottles",
+			"averageLeftover": "Avg. Leftover",
+			"diaperChanges": "Diaper Changes",
+			"feedingFrequency": "Feedings per Day",
+			"totalFeedings": "Total Feedings",
+			"efficiency": "Efficiency",
+			"timePeriods": {
+				"24h": "24h",
+				"7d": "7 days",
+				"30d": "30 days"
+			}
+		}
+	},
+	"time": {
+		"past": {
+			"entries": "Entries",
+			"hoursAndMinutes": "{hours} hours and {minutes} minutes ago"
+		},
+		"noEntries": "No entries yet"
+	},
+	"landingPage": {
+		"hero": {
+			"title": "FeedChange",
+			"subtitle": "Simple, private tracking for your baby's feeding and diaper changes. No accounts, no emails, no tracking - just pure functionality.",
+			"ctaButton": "Start Tracking Now"
+		},
+		"privacy": {
+			"title": "Your Privacy Matters",
+			"noEmail": {
+				"title": "No Email Required",
+				"description": "Start tracking immediately without creating an account or providing any personal information."
+			},
+			"zeroTracking": {
+				"title": "Zero Tracking",
+				"description": "No analytics, no cookies, no data collection. Your baby's information stays private."
+			},
+			"autoCleanup": {
+				"title": "Auto-Cleanup",
+				"description": "All data is automatically deleted after 7 days of inactivity. No manual cleanup needed."
+			},
+			"secureHosting": {
+				"title": "Secure Database Hosting",
+				"description": "Your data is securely stored in Cloudflare's D1 database with enterprise-grade security and automatic routine cleanup to ensure your information never accumulates unnecessarily."
+			}
+		},
+		"features": {
+			"title": "What You Can Track",
+			"feeding": {
+				"title": "Feeding Sessions",
+				"bottleSize": "Track bottle size and amount consumed",
+				"visualInterface": "Visual bottle interface with slider",
+				"history": "Feeding history and patterns"
+			},
+			"diaper": {
+				"title": "Diaper Changes",
+				"quickLogging": "Quick diaper change logging",
+				"frequency": "Change frequency tracking",
+				"timestamps": "Last change timestamps"
+			}
+		},
+		"howItWorks": {
+			"title": "How It Works",
+			"step1": {
+				"title": "Create Baby Profile",
+				"description": "Add your baby's name, weight, and current bottle size. No personal details required."
+			},
+			"step2": {
+				"title": "Track Daily Activities",
+				"description": "Log feeding sessions and diaper changes with our intuitive interface."
+			},
+			"step3": {
+				"title": "Monitor Progress",
+				"description": "View feeding patterns and diaper change frequency over time."
+			}
+		},
+		"privacyBadge": {
+			"title": "Privacy-First Design",
+			"description": "FeedChange is built with your privacy in mind. We believe you shouldn't have to sacrifice privacy to track your baby's development. That's why we don't collect emails, don't track your usage, and automatically clean up data after 7 days of inactivity.",
+			"badges": {
+				"noEmail": "No Email Required",
+				"noAnalytics": "No Analytics",
+				"noTracking": "No Tracking",
+				"autoCleanup": "Auto-Cleanup"
+			}
+		},
+		"cta": {
+			"title": "Ready to Start?",
+			"subtitle": "Join thousands of parents who trust FeedChange for simple, private baby tracking.",
+			"button": "Get Started Now",
+			"footer": "No registration required • Start tracking in seconds"
+		},
+		"openSource": {
+			"title": "Open Source",
+			"description": "FeedChange is open source and available on GitHub. Feel free to contribute, report issues, or run your own instance.",
+			"button": "View on GitHub"
+		}
+	}
+}

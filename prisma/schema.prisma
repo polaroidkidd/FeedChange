@@ -1,0 +1,34 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider        = "prisma-client-js"
+  output          = "../node_modules/.prisma/client"
+  previewFeatures = ["driverAdapters"]
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Baby {
+  id                String   @id()
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  name              String
+  currentBottleSize Int      @default(0)
+  weight            Int      @default(0)
+  events            Event[]
+}
+
+model Event {
+  id             String   @id()
+  createdAt      DateTime @default(now())
+  diaperChanged  Boolean? @default(false)
+  bottleSize     Int?     @default(0)
+  amountConsumed Int?     @default(0)
+
+  baby   Baby?   @relation(fields: [babyId], references: [id])
+  babyId String?
+}

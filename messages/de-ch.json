@@ -1,0 +1,137 @@
+{
+	"$schema": "https://inlang.com/schema/inlang-message-format",
+	"app": {
+		"accept": "Akzeptieren",
+		"decline": "Ablehnen",
+		"save": "Speichern",
+		"cancel": "Abbrechen",
+		"error": {
+			"title": "Fehler",
+			"body": "Etwas ist schiefgelaufen. Bitte versuchen sie es später erneut."
+		}
+	},
+	"baby": {
+		"create": {
+			"log": "Starten",
+			"name": "Name",
+			"weight": "Gewicht (g)",
+			"currentBottleSize": "Aktuelle Flasche (ml)"
+		},
+		"actions": {
+			"fed": {
+				"amount": "Getrunken (ml)",
+				"create": "Fütterung erstellen",
+				"hasBeen": "{name} hat getrunken",
+				"drank": "{amount}/{bottleSize}ml getrunken",
+				"feeding": "{name}'s Essen"
+			},
+			"diapered": {
+				"create": "Windelwechsel erstellen",
+				"hasBeen": "{name} hat frische Windeln"
+			}
+		},
+		"history": {
+			"fed": "Last feeding",
+			"diapered": "Last diaper change"
+		},
+		"stats": {
+			"title": "Statistiken",
+			"totalConsumed": "Gesamt getrunken",
+			"averageBottleSize": "Flaschengröße Ø",
+			"emptyBottles": "Leere Flaschen",
+			"averageLeftover": "Rest Ø",
+			"diaperChanges": "Windelwechsel",
+			"feedingFrequency": "Fütterungen pro Tag",
+			"totalFeedings": "Gesamt Fütterungen",
+			"timePeriods": {
+				"24h": "24h",
+				"7d": "7 Tage",
+				"30d": "30 Tage"
+			}
+		}
+	},
+	"time": {
+		"past": {
+			"entries": "Einträge",
+			"hoursAndMinutes": "Vor {hours} Stunden und {minutes} Minuten"
+		},
+		"noEntries": "Noch keine Einträge"
+	},
+	"landingPage": {
+		"hero": {
+			"title": "FeedChange",
+			"subtitle": "Einfache, private Verfolgung der Fütterung und Windelwechsel Ihres Babys. Keine Konten, keine E-Mails, keine Verfolgung - nur reine Funktionalität.",
+			"ctaButton": "Jetzt Starten"
+		},
+		"privacy": {
+			"title": "Ihre Privatsphäre ist uns wichtig",
+			"noEmail": {
+				"title": "Keine E-Mail erforderlich",
+				"description": "Beginnen Sie sofort mit der Verfolgung, ohne ein Konto zu erstellen oder persönliche Informationen anzugeben."
+			},
+			"zeroTracking": {
+				"title": "Kein Tracking",
+				"description": "Keine Analysen, keine Cookies, keine Datenerfassung. Die Informationen Ihres Babys bleiben privat."
+			},
+			"autoCleanup": {
+				"title": "Automatische Bereinigung",
+				"description": "Alle Daten werden automatisch nach 7 Tagen Inaktivität gelöscht. Keine manuelle Bereinigung erforderlich."
+			},
+			"secureHosting": {
+				"title": "Sichere Datenbank-Hosting",
+				"description": "Ihre Daten werden sicher in Cloudflare's D1-Datenbank mit unternehmenstauglicher Sicherheit gespeichert und automatisch routinemäßig bereinigt, um sicherzustellen, dass sich Ihre Informationen nie unnötig ansammeln."
+			}
+		},
+		"features": {
+			"title": "Was Sie verfolgen können",
+			"feeding": {
+				"title": "Fütterung",
+				"bottleSize": "Flaschegröße und verbrauchte Menge verfolgen",
+				"visualInterface": "Visuelle Flaschenoberfläche mit Schieberegler",
+				"history": "Fütterungsverlauf und Muster"
+			},
+			"diaper": {
+				"title": "Windelwechsel",
+				"quickLogging": "Schnelle Protokollierung von Windelwechseln",
+				"frequency": "Verfolgung der Wechselfrequenz",
+				"timestamps": "Zeitstempel des letzten Wechsels"
+			}
+		},
+		"howItWorks": {
+			"title": "Wie es funktioniert",
+			"step1": {
+				"title": "Baby-Profil erstellen",
+				"description": "Fügen Sie den Namen, das Gewicht und die aktuelle Flaschengröße Ihres Babys hinzu. Keine persönlichen Details erforderlich."
+			},
+			"step2": {
+				"title": "Aktivitäten eingeben",
+				"description": "Protokollieren Sie Fütterungssitzungen und Windelwechsel mit unserer intuitiven Oberfläche."
+			},
+			"step3": {
+				"title": "Fortschritt ansehen",
+				"description": "Betrachten Sie Fütterungsmuster und Windelwechselhäufigkeit im Laufe der Zeit."
+			}
+		},
+		"privacyBadge": {
+			"title": "Datenschutz",
+			"description": "FeedChange wurde mit Ihrem Datenschutz im Sinn entwickelt. Wir glauben, dass Sie nicht auf Privatsphäre verzichten sollten, um die Entwicklung Ihres Babys zu verfolgen. Deshalb sammeln wir keine E-Mails, verfolgen nicht Ihre Nutzung und bereinigen automatisch Daten nach 7 Tagen Inaktivität.",
+			"badges": {
+				"noEmail": "Keine E-Mail erforderlich",
+				"noAnalytics": "Keine Analysen",
+				"noTracking": "Kein Tracking",
+				"autoCleanup": "Automatische Bereinigung"
+			}
+		},
+		"cta": {
+			"title": "Bereit zu starten?",
+			"subtitle": "Schließen Sie sich Tausenden von Eltern an, die FeedChange für einfache, private Baby-Verfolgung vertrauen.",
+			"button": "Jetzt loslegen",
+			"footer": "Keine Registrierung erforderlich • Starten Sie in Sekunden"
+		},
+		"openSource": {
+			"title": "Open Source",
+			"description": "FeedChange ist Open Source und auf GitHub verfügbar. Fühlen Sie sich frei, beizutragen, Probleme zu melden oder Ihre eigene Instanz zu betreiben.",
+			"button": "Auf GitHub ansehen"
+		}
+	}
+}
