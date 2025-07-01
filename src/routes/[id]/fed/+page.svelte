@@ -1,60 +1,47 @@
 <script lang="ts">
-	import { createMutation } from '@tanstack/svelte-query';
-	import { Button, cn, Modal, P, Range } from 'flowbite-svelte';
+	import { Button, cn, P, Range } from 'flowbite-svelte';
 	import { Confetti } from 'svelte-confetti';
 
-	import { invalidateAll } from '$app/navigation';
+	import { goto } from '$app/navigation';
 	import { page } from '$app/state';
 	import { BabyBottle } from '$lib/components';
 	import { m } from '$lib/paraglide/messages.js';
 
-	type Props = {
-		isOpen: boolean;
-		currentBottleSize: number;
-		babyName: string;
-	};
-
-	let {
-		isOpen = $bindable(false),
-		currentBottleSize = $bindable(0),
-		babyName = $bindable('')
-	}: Props = $props();
-
-	type Form = {
-		amountConsumed: number;
-		todayBottleSize: number;
-	};
-	let form: Form = $state({
+	let form = $state({
 		amountConsumed: 0,
 		todayBottleSize: currentBottleSize
 	});
 
 	let showConfetti = $state(false);
+	let isLoading = $state(false);
 
-	const createEventMutation = createMutation({
-		mutationFn: (form: Form) =>
-			fetch(page.url.pathname, {
+	async function createEvent() {
+		isLoading = true;
+		try {
+			const response = await fetch(page.url.pathname, {
 				method: 'POST',
 				body: JSON.stringify({
 					amountConsumed: form.amountConsumed,
 					bottleSize: form.todayBottleSize
 				})
-			}),
-		mutationKey: [CacheKeys.BabyFedMutation],
-		onSuccess: () => {
-			isOpen = false;
-			// Reset form
-			form.amountConsumed = 0;
-			form.todayBottleSize = currentBottleSize;
-			invalidateAll();
+			});
+
+			if (response.ok) {
+				isOpen = false;
+				// Reset form
+				form.amountConsumed = 0;
+				form.todayBottleSize = currentBottleSize;
+				goto(page.params);
+			}
+		} catch (error) {
+			console.error('Error creating event:', error);
+		} finally {
+			isLoading = false;
 		}
-	});
-	async function createEvent() {
-		$createEventMutation.mutate(form);
 	}
 
 	function handleClose() {
-		if ($createEventMutation.isPending) return; // Prevent closing while loading
+		if (isLoading) return; // Prevent closing while loading
 
 		// Reset form when closing
 		form.amountConsumed = 0;
@@ -62,7 +49,7 @@
 	}
 
 	function adjustBottleSize(amount: number) {
-		if ($createEventMutation.isPending) return; // Prevent adjustments while loading
+		if (isLoading) return; // Prevent adjustments while loading
 		form.todayBottleSize = Math.max(0, form.todayBottleSize + amount);
 	}
 
@@ -76,28 +63,9 @@
 			}, 3000);
 		}
 	});
-
-	$effect(() => {
-		if (isOpen) {
-			document.body.style.overflow = 'hidden';
-		} else {
-			document.body.style.overflow = 'auto';
-		}
-	});
 </script>
 
-<Modal
-	headerClass="*:mx-auto w-full"
-	title={m['baby.actions.fed.feeding']({ name: babyName })}
-	bind:open={isOpen}
-	onclose={handleClose}
-	size="sm"
-	class="mt-10  w-19/20"
-	placement="top-center"
-	dismissable={!$createEventMutation.isPending}
-	autoclose={!$createEventMutation.isPending}
-	outsideclose={!$createEventMutation.isPending}
->
+<Card>
 	<div class={cn('flex  justify-center')}>
 		<div class={cn('grid auto-cols-min grid-cols-1 items-center justify-items-center gap-4')}>
 			<P class="text-center">
@@ -116,7 +84,7 @@
 					pill
 					color="emerald"
 					onclick={() => adjustBottleSize(-10)}
-					disabled={$createEventMutation.isPending}
+					disabled={isLoading}
 				>
 					-10 ml
 				</Button>
@@ -126,7 +94,7 @@
 					pill
 					color="emerald"
 					onclick={() => adjustBottleSize(-5)}
-					disabled={$createEventMutation.isPending}
+					disabled={isLoading}
 				>
 					-5 ml
 				</Button>
@@ -136,7 +104,7 @@
 					pill
 					color="emerald"
 					onclick={() => adjustBottleSize(5)}
-					disabled={$createEventMutation.isPending}
+					disabled={isLoading}
 				>
 					+5 ml
 				</Button>
@@ -146,7 +114,7 @@
 					pill
 					color="emerald"
 					onclick={() => adjustBottleSize(10)}
-					disabled={$createEventMutation.isPending}
+					disabled={isLoading}
 				>
 					+10 ml
 				</Button>
@@ -172,7 +140,7 @@
 					min={0}
 					max={form.todayBottleSize}
 					step={1}
-					disabled={$createEventMutation.isPending}
+					disabled={isLoading}
 				/>
 
 				{#if showConfetti}
@@ -184,7 +152,7 @@
 				max={form.todayBottleSize}
 				step={1}
 				bind:value={form.amountConsumed}
-				disabled={$createEventMutation.isPending}
+				disabled={isLoading}
 			/>
 			<P class="text-center">
 				<span class="font-bold-500">
@@ -202,16 +170,16 @@
 				class={cn('mr-auto cursor-pointer')}
 				color="alternative"
 				onclick={handleClose}
-				disabled={$createEventMutation.isPending}
+				disabled={isLoading}
 			>
 				{m['app.cancel']()}
 			</Button>
 			<Button
 				class={cn('cursor-pointer disabled:cursor-not-allowed')}
 				onclick={createEvent}
-				disabled={$createEventMutation.isPending || form.amountConsumed === 0}
+				disabled={isLoading || form.amountConsumed === 0}
 			>
-				{#if $createEventMutation.isPending}
+				{#if isLoading}
 					<div class="flex items-center gap-2">
 						<div
 							class="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"
@@ -224,7 +192,7 @@
 			</Button>
 		</div>
 	{/snippet}
-</Modal>
+</Card>
 
 <style lang="scss">
 	.hide-range {

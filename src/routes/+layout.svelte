@@ -1,11 +1,14 @@
 <script lang="ts">
 	import '../app.css';
 
+	import { QueryClientProvider } from '@tanstack/svelte-query';
 	import { cn } from 'flowbite-svelte';
 
 	import { NavBar } from '$lib/components';
 
-	let { children } = $props();
+	import type { LayoutProps } from './$types';
+
+	let { data, children }: LayoutProps = $props();
 </script>
 
 <svelte:head>
@@ -19,6 +22,7 @@
 <div class={cn('container mx-auto p-3')}>
 	<div class="bg-gradient"></div>
 	<div class="bg-grid"></div>
-
-	{@render children()}
+	<QueryClientProvider client={data.queryClient}>
+		{@render children()}
+	</QueryClientProvider>
 </div>
