@@ -1,6 +1,5 @@
 import { json, type RequestHandler } from '@sveltejs/kit';
 import { RateLimiter } from 'sveltekit-rate-limiter/server';
-import { v4 as uuid } from 'uuid';
 
 const limiter = new RateLimiter({
 	// A rate is defined as [number, unit]
@@ -14,25 +13,12 @@ const limiter = new RateLimiter({
 		preflight: true // Require preflight call (see load function)
 	}
 });
-
-export const POST: RequestHandler = async (event) => {
+export const DELETE: RequestHandler = async (event) => {
 	await limiter.cookieLimiter?.preflight(event);
 
-	const body = await event.request.json();
-
-	const created = await event.locals.db.event.create({
-		data: {
-			id: uuid(),
-			amountConsumed: body.amountConsumed,
-			bottleSize: body.bottleSize,
-			diaperChanged: body.diaperChanged,
-			baby: {
-				connect: {
-					id: event.params.id!
-				}
-			}
-		}
+	const deleted = await event.locals.db.event.delete({
+		where: { id: event.params.id! }
 	});
 
-	return json(created);
+	return json(deleted);
 };

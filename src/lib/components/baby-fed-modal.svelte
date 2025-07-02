@@ -30,7 +30,7 @@
 	async function createEvent() {
 		isLoading = true;
 		try {
-			const response = await fetch(page.url.pathname, {
+			const response = await fetch(`${page.url.pathname}/event`, {
 				method: 'POST',
 				body: JSON.stringify({
 					amountConsumed: form.amountConsumed,
