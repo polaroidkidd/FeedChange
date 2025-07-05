@@ -10,6 +10,11 @@
 			"body": "Etwas ist schiefgelaufen. Bitte versuchen sie es später erneut."
 		}
 	},
+	"errors": {
+		"time": {
+			"future": "Zeit kann nicht in der Zukunft sein"
+		}
+	},
 	"baby": {
 		"create": {
 			"log": "Starten",

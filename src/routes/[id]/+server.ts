@@ -19,6 +19,9 @@ export const POST: RequestHandler = async (event) => {
 	await limiter.cookieLimiter?.preflight(event);
 
 	const body = await event.request.json();
+	const date = new Date();
+
+	date.setHours(body.time.split(':')[0], body.time.split(':')[1], 0, 0);
 
 	const created = await event.locals.db.event.create({
 		data: {
@@ -26,6 +29,7 @@ export const POST: RequestHandler = async (event) => {
 			amountConsumed: body.amountConsumed,
 			bottleSize: body.bottleSize,
 			diaperChanged: body.diaperChanged,
+			createdAt: date,
 			baby: {
 				connect: {
 					id: event.params.id!
