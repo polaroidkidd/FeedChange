@@ -10,6 +10,11 @@
 			"body": "Something went wrong. Please try again later."
 		}
 	},
+	"errors": {
+		"time": {
+			"future": "Time cannot be in the future"
+		}
+	},
 	"baby": {
 		"create": {
 			"log": "Start",

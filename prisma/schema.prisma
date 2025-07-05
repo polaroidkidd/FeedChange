@@ -24,7 +24,7 @@ model Baby {
 
 model Event {
   id             String   @id()
-  createdAt      DateTime @default(now())
+  createdAt      DateTime 
   diaperChanged  Boolean? @default(false)
   bottleSize     Int?     @default(0)
   amountConsumed Int?     @default(0)

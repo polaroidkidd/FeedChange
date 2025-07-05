@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Button, cn, Modal, P, Range } from 'flowbite-svelte';
+	import { Button, cn, Modal, P, Range, Timepicker } from 'flowbite-svelte';
 	import { Confetti } from 'svelte-confetti';
 
 	import { invalidateAll } from '$app/navigation';
@@ -21,20 +21,51 @@
 
 	let form = $state({
 		amountConsumed: 0,
-		todayBottleSize: currentBottleSize
+		todayBottleSize: currentBottleSize,
+		time: new Date().toLocaleTimeString('en-US', {
+			hour: 'numeric',
+			minute: 'numeric',
+			second: undefined,
+			hour12: false
+		})
 	});
+	// console.log(time.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', second:'numeric', hour12: true }));
 
 	let showConfetti = $state(false);
 	let isLoading = $state(false);
+	let timeError = $state('');
+
+	// Validate that the time is not in the future
+	function validateTime() {
+		const selectedTime = new Date();
+		const [hours, minutes] = form.time.split(':').map(Number);
+		selectedTime.setHours(hours, minutes, 0, 0);
+
+		const now = new Date();
+
+		if (selectedTime > now) {
+			timeError = m['errors.time.future']();
+			return false;
+		} else {
+			timeError = '';
+			return true;
+		}
+	}
 
 	async function createEvent() {
+		// Validate time before submitting
+		if (!validateTime()) {
+			return;
+		}
+
 		isLoading = true;
 		try {
 			const response = await fetch(page.url.pathname, {
 				method: 'POST',
 				body: JSON.stringify({
 					amountConsumed: form.amountConsumed,
-					bottleSize: form.todayBottleSize
+					bottleSize: form.todayBottleSize,
+					time: form.time
 				})
 			});
 
@@ -43,6 +74,7 @@
 				// Reset form
 				form.amountConsumed = 0;
 				form.todayBottleSize = currentBottleSize;
+				timeError = '';
 				invalidateAll();
 			}
 		} catch (error) {
@@ -58,6 +90,7 @@
 		// Reset form when closing
 		form.amountConsumed = 0;
 		form.todayBottleSize = currentBottleSize;
+		timeError = '';
 	}
 
 	function adjustBottleSize(amount: number) {
@@ -81,6 +114,13 @@
 			document.body.style.overflow = 'hidden';
 		} else {
 			document.body.style.overflow = 'auto';
+		}
+	});
+
+	// Validate time whenever it changes
+	$effect(() => {
+		if (form.time) {
+			validateTime();
 		}
 	});
 </script>
@@ -192,6 +232,12 @@
 			</P>
 		</div>
 	</div>
+	<div class="flex flex-col items-center gap-2">
+		<Timepicker bind:value={form.time} />
+		{#if timeError}
+			<P class="text-sm text-red-500">{timeError}</P>
+		{/if}
+	</div>
 	{#snippet footer()}
 		<div class={cn('flex w-full justify-end gap-4')}>
 			<Button
@@ -205,7 +251,7 @@
 			<Button
 				class={cn('cursor-pointer disabled:cursor-not-allowed')}
 				onclick={createEvent}
-				disabled={isLoading || form.amountConsumed === 0}
+				disabled={isLoading || form.amountConsumed === 0 || timeError !== ''}
 			>
 				{#if isLoading}
 					<div class="flex items-center gap-2">
