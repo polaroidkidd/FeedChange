@@ -1,8 +1,11 @@
 <script lang="ts">
-	import { Button, Card, cn, Heading, P } from 'flowbite-svelte';
+	import dayjs from 'dayjs';
+	import relativeTime from 'dayjs/plugin/relativeTime';
+	import { Card, cn, Heading, P } from 'flowbite-svelte';
 
-	import { page } from '$app/state';
 	import { m } from '$lib/paraglide/messages';
+
+	dayjs.extend(relativeTime);
 
 	interface Event {
 		id: string;
@@ -18,14 +21,19 @@
 	}
 
 	let { events = $bindable<Event[]>([]), babyName }: Props = $props();
-	let loading = $state(false);
-	let hasMore = $state(true);
 	// Sort events from most recent to oldest
-	const sortedEvents = $derived(
-		[...events].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
-	);
+
+	function getTimeAgoDayjs(date: Date): { hours: number; minutes: number } {
+		const now = dayjs();
+		const eventDate = dayjs(date);
+		console.info('now: ', now);
+		console.info('eventDate: ', eventDate);
+		console.info('date: ', date);
+		console.info('eventDate.fromNow(): ', eventDate.fromNow());
+	}
 
 	function getTimeAgo(date: Date): { hours: number; minutes: number } {
+		getTimeAgoDayjs(date);
 		const now = new Date();
 		const eventDate = new Date(date);
 		const diffTime = Math.abs(now.getTime() - eventDate.getTime());
@@ -55,15 +63,6 @@
 	function formatEventDescription(event: Event) {
 		return `${m['baby.actions.fed.drank']({ amount: event.amountConsumed, bottleSize: event.bottleSize })}`;
 	}
-
-	async function fetchAllEvents() {
-		loading = true;
-		const response = await fetch(`/api/baby/${page.params.id}/event`);
-		const data = await response.json();
-		events = data;
-		loading = false;
-		hasMore = false;
-	}
 </script>
 
 <Card horizontal class={cn('m-3 mx-auto p-3')}>
@@ -72,13 +71,13 @@
 			{m['time.past.entries']()}
 		</Heading>
 
-		{#if sortedEvents.length === 0}
+		{#if events.length === 0}
 			<Heading tag="h6" class={cn('mx-auto text-gray-500')}>
 				{m['time.noEntries']()}
 			</Heading>
 		{:else}
 			<div class={cn('flex flex-col gap-2')}>
-				{#each sortedEvents as event (event.id)}
+				{#each events as event (event.id)}
 					<hr class="w-full border-gray-200" />
 					<div class={cn('flex items-center gap-3 p-2')}>
 						<img src={getEventIcon(event)} alt="event icon" class={cn('h-6 w-6')} />
@@ -100,15 +99,6 @@
 						</div>
 					</div>
 				{/each}
-				{#if hasMore}
-					<Button onclick={fetchAllEvents} disabled={loading} class={cn('mx-auto')}>
-						{m['time.past.loadMore']()}
-					</Button>
-				{:else}
-					<P class={cn('text-center text-gray-500')}>
-						{m['time.past.noMoreEntries']()}
-					</P>
-				{/if}
 			</div>
 		{/if}
 	</div>

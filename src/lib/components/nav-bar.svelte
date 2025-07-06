@@ -1,12 +1,27 @@
 <script lang="ts">
+	import dayjs from 'dayjs';
+	import de from 'dayjs/locale/de';
+	import en from 'dayjs/locale/en';
 	import { cn, DarkMode, Dropdown, DropdownItem, Navbar, NavBrand } from 'flowbite-svelte';
 	import { ChevronDownOutline, ChevronRightOutline, LanguageOutline } from 'flowbite-svelte-icons';
+	import { onMount } from 'svelte';
 
 	import { getLocale, setLocale } from '$lib/paraglide/runtime';
 
 	let currentLocale = $state(getLocale());
 
 	let isOpen = $state(false);
+
+	onMount(() => {
+		dayjs.locale(currentLocale === 'en' ? en : de);
+	});
+
+	function updateLocale(locale: 'en' | 'de-ch') {
+		setLocale(locale);
+		currentLocale = locale;
+		isOpen = false;
+		dayjs.locale(locale === 'en' ? en : de);
+	}
 </script>
 
 <Navbar>
@@ -23,7 +38,7 @@
 		<ChevronDownOutline class="absolute -bottom-2 left-0 dark:text-white" />
 	</button>
 	<Dropdown simple bind:isOpen>
-		<DropdownItem onclick={() => setLocale('en')}>
+		<DropdownItem onclick={() => updateLocale('en')}>
 			<div class={cn('flex w-9 cursor-pointer')}>
 				{#if currentLocale === 'en'}
 					<ChevronRightOutline />
@@ -31,7 +46,7 @@
 				<span class={cn('ml-auto')}>EN</span>
 			</div>
 		</DropdownItem>
-		<DropdownItem onclick={() => setLocale('de-ch')}>
+		<DropdownItem onclick={() => updateLocale('de-ch')}>
 			<div class={cn('flex w-9 cursor-pointer')}>
 				{#if currentLocale === 'de-ch'}
 					<ChevronRightOutline />

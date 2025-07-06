@@ -10,7 +10,7 @@
 	},
 	"license": "MIT",
 	"scripts": {
-		"dev": "pnpm db:push:dev && dotenv -e .env.local -- vite dev --host",
+		"dev": "pnpm clean && pnpm db:push:dev && dotenv -e .env.local -- vite dev --host",
 		"build": "pnpm clean && pnpm db:generate:prod && vite build --mode production",
 		"preview": "pnpm build && wrangler pages dev ./.svelte-kit/cloudflare",
 		"clean": "rimraf dist .svelte-kit",
@@ -78,6 +78,7 @@
 		"@libsql/client": "^0.14.0",
 		"@prisma/adapter-better-sqlite3": "^6.10.1",
 		"clsx": "^2.1.1",
+		"dayjs": "^1.11.13",
 		"flowbite": "^3.1.2",
 		"flowbite-svelte": "^1.8.2",
 		"flowbite-svelte-icons": "^2.2.1",

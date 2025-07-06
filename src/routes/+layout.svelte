@@ -4,8 +4,11 @@
 	import { cn } from 'flowbite-svelte';
 
 	import { NavBar } from '$lib/components';
+	import { initTemporalState } from '$lib/components/stores/dayjs.svelte';
 
 	let { children } = $props();
+
+	initTemporalState();
 </script>
 
 <svelte:head>

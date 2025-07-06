@@ -7,7 +7,6 @@ export const load = (async ({ params, locals }) => {
 		},
 		include: {
 			events: {
-				take: 10,
 				orderBy: {
 					createdAt: 'desc'
 				}
