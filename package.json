@@ -1,7 +1,7 @@
 {
 	"name": "feedchange",
 	"private": true,
-	"version": "0.1.0",
+	"version": "0.1.1",
 	"type": "module",
 	"description": "A simple, privacy-focused baby tracking application for monitoring feeding sessions and diaper changes. Built with SvelteKit and designed with parents' privacy in mind.",
 	"author": {

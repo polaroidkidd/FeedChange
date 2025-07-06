@@ -5,6 +5,25 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.1] - 2025-07-06
+
+### Fixed
+
+- **Time property handling**: Fixed server-side error when time property is not provided in feeding events
+- Made time property optional in event creation API to prevent crashes when no custom time is selected
+- Updated version to 0.1.1
+
+### Technical Details
+
+- Added null check for `body.time` before attempting to parse time values
+- Enhanced server-side event creation to handle cases where time is undefined
+- Updated package.json version to reflect the bug fix
+
+### Files Modified
+
+- `src/routes/[id]/+server.ts` - Added optional time handling
+- `package.json` - Updated version to 0.1.1
+
 ## [0.1.0] - 2025-07-05
 
 ### Added
