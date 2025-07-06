@@ -5,6 +5,36 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.0] - 2025-07-06
+
+### Added
+
+- **Event pagination**: Limited initial display to show only the 10 most recent events for better performance
+- "Load more" button to fetch all events when needed
+- "No more entries" message when all events have been loaded
+- Internationalization support for new pagination messages in English and German
+
+### Changed
+
+- Modified database queries to limit initial event loading to 10 most recent entries
+- Updated event display component to support pagination functionality
+- Enhanced user experience by reducing initial page load time
+
+### Technical Details
+
+- Added `take: 10` and `orderBy: { createdAt: 'desc' }` to database queries
+- Implemented `fetchAllEvents()` function to load complete event history
+- Added loading states and "hasMore" flag for pagination control
+- Updated internationalization files with new pagination messages
+
+### Files Modified
+
+- `src/routes/[id]/+page.server.ts` - Added event limit to database query
+- `src/lib/components/past-events.svelte` - Implemented pagination functionality
+- `messages/en.json` - Added pagination-related messages
+- `messages/de-ch.json` - Added German translations for pagination
+- `package.json` - Updated version to 0.2.0
+
 ## [0.1.1] - 2025-07-06
 
 ### Fixed

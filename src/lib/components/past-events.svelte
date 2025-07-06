@@ -1,6 +1,7 @@
 <script lang="ts">
-	import { Card, cn, Heading, P } from 'flowbite-svelte';
+	import { Button, Card, cn, Heading, P } from 'flowbite-svelte';
 
+	import { page } from '$app/state';
 	import { m } from '$lib/paraglide/messages';
 
 	interface Event {
@@ -16,8 +17,9 @@
 		babyName: string;
 	}
 
-	let { events, babyName }: Props = $props();
-
+	let { events = $bindable<Event[]>([]), babyName }: Props = $props();
+	let loading = $state(false);
+	let hasMore = $state(true);
 	// Sort events from most recent to oldest
 	const sortedEvents = $derived(
 		[...events].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
@@ -52,6 +54,15 @@
 
 	function formatEventDescription(event: Event) {
 		return `${m['baby.actions.fed.drank']({ amount: event.amountConsumed, bottleSize: event.bottleSize })}`;
+	}
+
+	async function fetchAllEvents() {
+		loading = true;
+		const response = await fetch(`/api/baby/${page.params.id}/event`);
+		const data = await response.json();
+		events = data;
+		loading = false;
+		hasMore = false;
 	}
 </script>
 
@@ -89,6 +100,15 @@
 						</div>
 					</div>
 				{/each}
+				{#if hasMore}
+					<Button onclick={fetchAllEvents} disabled={loading} class={cn('mx-auto')}>
+						{m['time.past.loadMore']()}
+					</Button>
+				{:else}
+					<P class={cn('text-center text-gray-500')}>
+						{m['time.past.noMoreEntries']()}
+					</P>
+				{/if}
 			</div>
 		{/if}
 	</div>

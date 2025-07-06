@@ -59,7 +59,9 @@
 	"time": {
 		"past": {
 			"entries": "Entries",
-			"hoursAndMinutes": "{hours} hours and {minutes} minutes ago"
+			"hoursAndMinutes": "{hours} hours and {minutes} minutes ago",
+			"loadMore": "Load more",
+			"noMoreEntries": "No more entries"
 		},
 		"noEntries": "No entries yet"
 	},

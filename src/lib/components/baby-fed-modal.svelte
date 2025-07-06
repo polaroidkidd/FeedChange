@@ -60,7 +60,7 @@
 
 		isLoading = true;
 		try {
-			const response = await fetch(page.url.pathname, {
+			const response = await fetch(`/api/baby/${page.params.id}/event`, {
 				method: 'POST',
 				body: JSON.stringify({
 					amountConsumed: form.amountConsumed,

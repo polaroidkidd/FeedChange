@@ -6,7 +6,12 @@ export const load = (async ({ params, locals }) => {
 			id: params.id
 		},
 		include: {
-			events: true
+			events: {
+				take: 10,
+				orderBy: {
+					createdAt: 'desc'
+				}
+			}
 		}
 	});
 
