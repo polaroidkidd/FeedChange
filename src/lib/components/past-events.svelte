@@ -4,8 +4,11 @@
 	import { Card, cn, Heading, P } from 'flowbite-svelte';
 
 	import { m } from '$lib/paraglide/messages';
+	import { getTemporalState } from '$lib/stores';
 
 	dayjs.extend(relativeTime);
+	const temporalState = getTemporalState();
+	console.info('temporalState: ', temporalState);
 
 	interface Event {
 		id: string;

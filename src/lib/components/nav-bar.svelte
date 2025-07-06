@@ -7,10 +7,12 @@
 	import { onMount } from 'svelte';
 
 	import { getLocale, setLocale } from '$lib/paraglide/runtime';
+	import { getTemporalState } from '$lib/stores/temporal.svelte';
 
 	let currentLocale = $state(getLocale());
 
 	let isOpen = $state(false);
+	const temporalState = getTemporalState();
 
 	onMount(() => {
 		dayjs.locale(currentLocale === 'en' ? en : de);

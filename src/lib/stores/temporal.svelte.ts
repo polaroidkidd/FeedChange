@@ -24,12 +24,12 @@ class TemporalStateClass implements TemporalState {
 		this.locales = { en, de };
 	}
 
-	updateLocale(locale: 'en' | 'de') {
+	public setLocale(locale: 'en' | 'de') {
 		this.currentLocale = locale;
 		this.instance.locale(locale === 'en' ? en : de);
 	}
 
-	getLocale() {
+	public getLocale() {
 		return this.currentLocale;
 	}
 }
@@ -40,8 +40,8 @@ export function initTemporalState() {
 	return temporalState;
 }
 
-export function getTemporalState() {
-	const state = getContext(Contexts.Temporal);
+export function getTemporalState(): typeof TemporalStateClass {
+	const state = getContext<typeof TemporalStateClass>(Contexts.Temporal);
 	if (!state) {
 		throw new Error('Temporal state not defined.');
 	}

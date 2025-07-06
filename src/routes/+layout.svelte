@@ -4,7 +4,7 @@
 	import { cn } from 'flowbite-svelte';
 
 	import { NavBar } from '$lib/components';
-	import { initTemporalState } from '$lib/components/stores/dayjs.svelte';
+	import { initTemporalState } from '$lib/stores';
 
 	let { children } = $props();
 
