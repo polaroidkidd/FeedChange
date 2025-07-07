@@ -251,7 +251,7 @@
 			<Button
 				class={cn('cursor-pointer disabled:cursor-not-allowed')}
 				onclick={createEvent}
-				disabled={isLoading || form.amountConsumed === 0 || timeError !== ''}
+				disabled={isLoading || form.amountConsumed === 0 || timeError !== '' || form.time === ''}
 			>
 				{#if isLoading}
 					<div class="flex items-center gap-2">

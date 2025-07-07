@@ -21,7 +21,9 @@
 
 	let { events = $bindable<Event[]>([]), babyName }: Props = $props();
 	// Sort events from most recent to oldest
-
+	let sortedEvents = $derived(
+		events.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime()).slice(0, 10)
+	);
 	function formatEventTitle(event: Event): string {
 		if (event.diaperChanged) {
 			return m['baby.actions.diapered.hasBeen']({ name: babyName });
@@ -66,7 +68,7 @@
 			</Heading>
 		{:else}
 			<div class={cn('flex flex-col gap-2')}>
-				{#each events.slice(0, 10) as event (event.id)}
+				{#each sortedEvents as event (event.id)}
 					<hr class="w-full border-gray-200" />
 					<div class={cn('flex items-center gap-3 p-2')}>
 						<img src={getEventIcon(event)} alt="event icon" class={cn('h-6 w-6')} />
