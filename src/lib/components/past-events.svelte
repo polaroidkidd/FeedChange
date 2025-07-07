@@ -40,7 +40,7 @@
 		return 'baby.svg';
 	}
 	function formatEventTime(event: Event) {
-		const { days, hours, minutes } = temporalState.hoursAndMinutesAgo(event.createdAt);
+		const { days, hours, minutes } = temporalState.timeAgo(event.createdAt);
 
 		return m['time.past.ago']({
 			days: days,

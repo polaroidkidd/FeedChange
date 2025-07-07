@@ -43,10 +43,11 @@ class TemporalStateClass {
 		return `${toHours}h ${toMinutes}m`;
 	}
 
-	hoursAndMinutesAgo(date: Date): { days: number; hours: number; minutes: number } {
+	timeAgo(date: Date): { days: number; hours: number; minutes: number } {
 		const minutes = dayjs(date).diff(dayjs(), 'minutes');
-		const hours = Math.floor(minutes / 60);
-		const days = Math.floor(hours / 24);
+		const hours = minutes > 60 ? Math.floor(minutes / 60) : 0;
+		const days = hours > 24 ? Math.floor(hours / 24) : 0;
+
 		return { days: Math.abs(days), hours: Math.abs(hours % 24), minutes: Math.abs(minutes % 60) };
 	}
 
