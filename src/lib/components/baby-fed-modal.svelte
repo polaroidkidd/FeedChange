@@ -6,12 +6,14 @@
 	import { page } from '$app/state';
 	import { BabyBottle } from '$lib/components';
 	import { m } from '$lib/paraglide/messages.js';
+	import { getTemporalState } from '$lib/stores';
 
 	type Props = {
 		isOpen: boolean;
 		currentBottleSize: number;
 		babyName: string;
 	};
+	const temporalState = getTemporalState();
 
 	let {
 		isOpen = $bindable(false),
@@ -22,28 +24,21 @@
 	let form = $state({
 		amountConsumed: 0,
 		todayBottleSize: currentBottleSize,
-		time: new Date().toLocaleTimeString('en-US', {
-			hour: 'numeric',
-			minute: 'numeric',
-			second: undefined,
-			hour12: false
-		})
+		time: temporalState.now()
 	});
 	// console.log(time.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', second:'numeric', hour12: true }));
 
 	let showConfetti = $state(false);
 	let isLoading = $state(false);
 	let timeError = $state('');
-
 	// Validate that the time is not in the future
 	function validateTime() {
-		const selectedTime = new Date();
-		const [hours, minutes] = form.time.split(':').map(Number);
-		selectedTime.setHours(hours, minutes, 0, 0);
+		const selectedTime = temporalState.dayjs
+			.set('hour', Number(form.time.split(':')[0]))
+			.set('minute', Number(form.time.split(':')[1]));
 
-		const now = new Date();
-
-		if (selectedTime > now) {
+		const isAfter = selectedTime.isAfter(new Date());
+		if (isAfter) {
 			timeError = m['errors.time.future']();
 			return false;
 		} else {
@@ -65,7 +60,10 @@
 				body: JSON.stringify({
 					amountConsumed: form.amountConsumed,
 					bottleSize: form.todayBottleSize,
-					time: form.time
+					time: {
+						hours: form.time.split(':')[0],
+						minutes: form.time.split(':')[1]
+					}
 				})
 			});
 
@@ -90,7 +88,9 @@
 		// Reset form when closing
 		form.amountConsumed = 0;
 		form.todayBottleSize = currentBottleSize;
+		form.time = temporalState.now();
 		timeError = '';
+		isOpen = false;
 	}
 
 	function adjustBottleSize(amount: number) {

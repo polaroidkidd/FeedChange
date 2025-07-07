@@ -12,7 +12,7 @@ const limiter = new RetryAfterRateLimiter({
 	IPUA: [5, 'm']
 });
 const handleRateLimit: Handle = async ({ event, resolve }) => {
-	if (event.request.method === 'POST') {
+	if (!dev && event.request.method === 'POST') {
 		const status = await limiter.check(event);
 		if (status.limited) {
 			const response = new Response(

@@ -15,7 +15,7 @@
 	const temporalState = getTemporalState();
 
 	onMount(() => {
-		dayjs.locale(currentLocale === 'en' ? en : de);
+		temporalState.setLocale(currentLocale === 'en' ? 'en' : 'de');
 	});
 
 	function updateLocale(locale: 'en' | 'de-ch') {

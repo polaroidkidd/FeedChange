@@ -58,9 +58,15 @@
 	"time": {
 		"past": {
 			"entries": "Einträge",
-			"hoursAndMinutes": "Vor {hours} Stunden und {minutes} Minuten",
-			"loadMore": "Mehr laden",
-			"noMoreEntries": "Keine weiteren Einträge"
+
+			"ago": [
+				{
+					"match": {
+						"days=0": "vor {hours} Stunden und {minutes} Minuten",
+						"days=*": "vor {days} Tagen, {hours} Stunden und {minutes} Minuten"
+					}
+				}
+			]
 		},
 		"noEntries": "Noch keine Einträge"
 	},

@@ -1,4 +1,5 @@
 import { json } from '@sveltejs/kit';
+import dayjs from 'dayjs';
 import { v4 as uuid } from 'uuid';
 
 import type { RequestHandler } from './$types';
@@ -16,11 +17,9 @@ export const GET: RequestHandler = async (event) => {
 
 export const POST: RequestHandler = async (event) => {
 	const body = await event.request.json();
-	const date = new Date();
-	const hasTime = body.time !== undefined;
-	if (hasTime) {
-		date.setHours(body.time.split(':')[0], body.time.split(':')[1], 0, 0);
-	}
+
+	const time = body.time;
+	const date = dayjs().set('hour', time.hours).set('minute', time.minutes).toDate();
 
 	const created = await event.locals.db.event.create({
 		data: {

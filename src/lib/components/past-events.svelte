@@ -1,14 +1,10 @@
 <script lang="ts">
-	import dayjs from 'dayjs';
-	import relativeTime from 'dayjs/plugin/relativeTime';
 	import { Card, cn, Heading, P } from 'flowbite-svelte';
 
 	import { m } from '$lib/paraglide/messages';
 	import { getTemporalState } from '$lib/stores';
 
-	dayjs.extend(relativeTime);
 	const temporalState = getTemporalState();
-	console.info('temporalState: ', temporalState);
 
 	interface Event {
 		id: string;
@@ -25,25 +21,6 @@
 
 	let { events = $bindable<Event[]>([]), babyName }: Props = $props();
 	// Sort events from most recent to oldest
-
-	function getTimeAgoDayjs(date: Date): { hours: number; minutes: number } {
-		const now = dayjs();
-		const eventDate = dayjs(date);
-		console.info('now: ', now);
-		console.info('eventDate: ', eventDate);
-		console.info('date: ', date);
-		console.info('eventDate.fromNow(): ', eventDate.fromNow());
-	}
-
-	function getTimeAgo(date: Date): { hours: number; minutes: number } {
-		getTimeAgoDayjs(date);
-		const now = new Date();
-		const eventDate = new Date(date);
-		const diffTime = Math.abs(now.getTime() - eventDate.getTime());
-		const diffHours = Math.floor(diffTime / (1000 * 60 * 60));
-		const diffMinutes = Math.floor((diffTime % (1000 * 60 * 60)) / (1000 * 60));
-		return { hours: diffHours, minutes: diffMinutes };
-	}
 
 	function formatEventTitle(event: Event): string {
 		if (event.diaperChanged) {
@@ -62,9 +39,18 @@
 		}
 		return 'baby.svg';
 	}
+	function formatEventTime(event: Event) {
+		const { days, hours, minutes } = temporalState.hoursAndMinutesAgo(event.createdAt);
+
+		return m['time.past.ago']({
+			days: days,
+			hours,
+			minutes
+		});
+	}
 
 	function formatEventDescription(event: Event) {
-		return `${m['baby.actions.fed.drank']({ amount: event.amountConsumed, bottleSize: event.bottleSize })}`;
+		return `${m['baby.actions.fed.drank']({ amount: event.amountConsumed!, bottleSize: event.bottleSize! })}`;
 	}
 </script>
 
@@ -80,7 +66,7 @@
 			</Heading>
 		{:else}
 			<div class={cn('flex flex-col gap-2')}>
-				{#each events as event (event.id)}
+				{#each events.slice(0, 10) as event (event.id)}
 					<hr class="w-full border-gray-200" />
 					<div class={cn('flex items-center gap-3 p-2')}>
 						<img src={getEventIcon(event)} alt="event icon" class={cn('h-6 w-6')} />
@@ -94,10 +80,7 @@
 								</P>
 							{/if}
 							<P class={cn('text-sm text-gray-500')}>
-								{m['time.past.hoursAndMinutes']({
-									hours: getTimeAgo(event.createdAt).hours,
-									minutes: getTimeAgo(event.createdAt).minutes
-								})}
+								{formatEventTime(event)}
 							</P>
 						</div>
 					</div>
