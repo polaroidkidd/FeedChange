@@ -9,7 +9,7 @@ const limiter = new RateLimiter({
 	cookie: {
 		// Cookie limiter
 		name: 'limiterid', // Unique cookie name for this limiter
-		secret: 'SECRETKEY-SERVER-ONLY', // Use $env/static/private
+		secret: 'PhbNM17fSd', // Use $env/static/private
 		rate: [2, 'm'],
 		preflight: true // Require preflight call (see load function)
 	}

@@ -12,7 +12,7 @@ const limiter = new RetryAfterRateLimiter({
 	IPUA: [5, 'm']
 });
 const handleRateLimit: Handle = async ({ event, resolve }) => {
-	if (event.request.method === 'POST') {
+	if (!dev && event.request.method === 'POST') {
 		const status = await limiter.check(event);
 		if (status.limited) {
 			const response = new Response(
@@ -48,14 +48,6 @@ const handlePrisma: Handle = async ({ event, resolve }) => {
 		const prisma = new PrismaClient({ adapter });
 		event.locals.db = prisma;
 	}
-	// delete last seven days of inactive babies
-	await event.locals.db.baby.deleteMany({
-		where: {
-			updatedAt: {
-				lt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 7)
-			}
-		}
-	});
 	return resolve(event);
 };
 export const handle: Handle = sequence(handleRateLimit, handleParaglide, handlePrisma);

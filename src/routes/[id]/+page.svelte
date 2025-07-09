@@ -6,6 +6,7 @@
 	import { page } from '$app/state';
 	import { BabyFedModal, PastEvents } from '$lib/components';
 	import { m } from '$lib/paraglide/messages';
+	import { getTemporalState } from '$lib/stores';
 
 	import type { PageData } from './$types';
 	let { data }: { data: PageData } = $props();
@@ -14,7 +15,7 @@
 	let isDiaperLoading = $state(false);
 	let showDiaperConfetti = $state(false);
 	let selectedTimePeriod = $state<'24h' | '7d' | '30d'>('24h');
-
+	const temporalState = getTemporalState();
 	// Calculate stats based on selected time period
 	function calculateStats() {
 		const now = new Date();
@@ -107,7 +108,8 @@
 			const response = await fetch(`/api/baby/${page.params.id}/event`, {
 				method: 'POST',
 				body: JSON.stringify({
-					diaperChanged: true
+					diaperChanged: true,
+					timeStamp: temporalState.dayjs.utc().toDate()
 				})
 			});
 
