@@ -4,8 +4,11 @@
 	import { cn } from 'flowbite-svelte';
 
 	import { NavBar } from '$lib/components';
-
+	import { getLocale } from '$lib/paraglide/runtime';
+	import { initTemporalState } from '$lib/stores';
 	let { children } = $props();
+
+	initTemporalState(getLocale() === 'en' ? 'en' : 'de');
 </script>
 
 <svelte:head>

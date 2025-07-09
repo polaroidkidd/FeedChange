@@ -5,6 +5,60 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.1] - 2025-07-06
+
+### Fixed
+
+- **Date/time handling**: Replaced native JavaScript Date handling with dayjs library for more reliable date/time operations
+- Fixed time validation and formatting inconsistencies across the application
+- Improved timezone handling and locale support for date/time display
+
+### Added
+
+- **dayjs integration**: Added dayjs library for consistent date/time manipulation
+- **Temporal state management**: New temporal store for centralized date/time handling
+- **Event deletion**: Added ability to delete individual events with confirmation toast
+- **Database seeding**: Added seed script for development data generation
+- **Enhanced time formatting**: Improved time ago display with days, hours, and minutes
+- **Locale-aware time handling**: Proper localization support for English and German
+
+### Changed
+
+- **Time input validation**: Enhanced time picker validation using dayjs for more accurate future time detection
+- **Event creation**: Updated event creation to use UTC timestamps for consistency
+- **Time display**: Improved time ago calculations with better precision and formatting
+- **Navigation**: Enhanced locale switching with proper dayjs locale configuration
+- **Database queries**: Removed event limit to show all events by default
+- **Rate limiting**: Disabled rate limiting in development mode
+
+### Technical Details
+
+- Added dayjs with UTC and relativeTime plugins for robust date/time handling
+- Implemented `TemporalStateClass` for centralized temporal operations
+- Created `timeAgo()` function for consistent time difference calculations
+- Updated internationalization messages to support dynamic time formatting
+- Added event deletion API endpoint with proper baby ownership validation
+- Enhanced form validation to prevent empty time submissions
+
+### Files Modified
+
+- `package.json` - Added dayjs dependency and updated version to 0.2.1
+- `src/lib/stores/temporal.svelte.ts` - New temporal state management
+- `src/lib/stores/contexts.ts` - New context definitions
+- `src/lib/stores/index.ts` - New store exports
+- `src/lib/components/baby-fed-modal.svelte` - Enhanced time validation and UTC handling
+- `src/lib/components/nav-bar.svelte` - Improved locale switching with dayjs
+- `src/lib/components/past-events.svelte` - Added event deletion and improved time display
+- `src/routes/+layout.svelte` - Added temporal state initialization
+- `src/routes/[id]/+page.server.ts` - Removed event limit
+- `src/routes/[id]/+page.svelte` - Updated event creation with UTC timestamps
+- `src/routes/api/baby/[id]/event/+server.ts` - Enhanced event creation with proper timestamp handling
+- `src/routes/api/baby/[id]/event/[eventId]/+server.ts` - New event deletion endpoint
+- `src/hooks.server.ts` - Disabled rate limiting in development
+- `prisma/seed.ts` - New database seeding script
+- `messages/en.json` - Updated time formatting messages
+- `messages/de-ch.json` - Updated German time formatting messages
+
 ## [0.2.0] - 2025-07-06
 
 ### Added

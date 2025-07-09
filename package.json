@@ -1,7 +1,7 @@
 {
 	"name": "feedchange",
 	"private": true,
-	"version": "0.2.0",
+	"version": "0.2.1",
 	"type": "module",
 	"description": "A simple, privacy-focused baby tracking application for monitoring feeding sessions and diaper changes. Built with SvelteKit and designed with parents' privacy in mind.",
 	"author": {
@@ -10,7 +10,7 @@
 	},
 	"license": "MIT",
 	"scripts": {
-		"dev": "pnpm db:push:dev && dotenv -e .env.local -- vite dev --host",
+		"dev": "pnpm clean && pnpm db:push:dev && dotenv -e .env.local -- vite dev --host",
 		"build": "pnpm clean && pnpm db:generate:prod && vite build --mode production",
 		"preview": "pnpm build && wrangler pages dev ./.svelte-kit/cloudflare",
 		"clean": "rimraf dist .svelte-kit",
@@ -25,7 +25,8 @@
 		"db:generate:dev": "dotenv -e .env.local -- prisma generate",
 		"db:generate:prod": "dotenv -e .env -- prisma generate",
 		"db:push:dev": "pnpm db:generate:dev && dotenv -e .env.local -- prisma db push",
-		"db:push:prod": "pnpm db:generate:prod && dotenv -e .env -- prisma db push"
+		"db:push:prod": "pnpm db:generate:prod && dotenv -e .env -- prisma db push",
+		"db:seed": "node --experimental-strip-types prisma/seed.ts"
 	},
 	"devDependencies": {
 		"@eslint/compat": "^1.3.1",
@@ -78,6 +79,7 @@
 		"@libsql/client": "^0.14.0",
 		"@prisma/adapter-better-sqlite3": "^6.10.1",
 		"clsx": "^2.1.1",
+		"dayjs": "^1.11.13",
 		"flowbite": "^3.1.2",
 		"flowbite-svelte": "^1.8.2",
 		"flowbite-svelte-icons": "^2.2.1",
@@ -92,13 +94,8 @@
 			"@prisma/engines",
 			"@tailwindcss/oxide",
 			"esbuild",
-			"prisma"
-		],
-		"patchedDependencies": {
-			"flowbite-svelte": "patches/flowbite-svelte.patch"
-		},
-		"ignoredBuiltDependencies": [
 			"sharp",
+			"prisma",
 			"workerd"
 		]
 	},

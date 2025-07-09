@@ -1,8 +1,11 @@
 <script lang="ts">
-	import { Button, Card, cn, Heading, P } from 'flowbite-svelte';
+	import { Card, cn, Heading, P, Toast } from 'flowbite-svelte';
+	import { BadgeCheckSolid, TrashBinOutline } from 'flowbite-svelte-icons';
 
-	import { page } from '$app/state';
+	import { page } from '$app/stores';
 	import { m } from '$lib/paraglide/messages';
+	import { getTemporalState } from '$lib/stores';
+	const temporalState = getTemporalState();
 
 	interface Event {
 		id: string;
@@ -18,22 +21,10 @@
 	}
 
 	let { events = $bindable<Event[]>([]), babyName }: Props = $props();
-	let loading = $state(false);
-	let hasMore = $state(true);
 	// Sort events from most recent to oldest
-	const sortedEvents = $derived(
-		[...events].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+	let sortedEvents = $derived(
+		events.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime()).slice(0, 10)
 	);
-
-	function getTimeAgo(date: Date): { hours: number; minutes: number } {
-		const now = new Date();
-		const eventDate = new Date(date);
-		const diffTime = Math.abs(now.getTime() - eventDate.getTime());
-		const diffHours = Math.floor(diffTime / (1000 * 60 * 60));
-		const diffMinutes = Math.floor((diffTime % (1000 * 60 * 60)) / (1000 * 60));
-		return { hours: diffHours, minutes: diffMinutes };
-	}
-
 	function formatEventTitle(event: Event): string {
 		if (event.diaperChanged) {
 			return m['baby.actions.diapered.hasBeen']({ name: babyName });
@@ -51,19 +42,45 @@
 		}
 		return 'baby.svg';
 	}
+	function formatEventTime(event: Event) {
+		const { days, hours, minutes } = temporalState.timeAgo(event.createdAt);
+
+		return m['time.past.ago']({
+			days: days,
+			hours,
+			minutes
+		});
+	}
 
 	function formatEventDescription(event: Event) {
-		return `${m['baby.actions.fed.drank']({ amount: event.amountConsumed, bottleSize: event.bottleSize })}`;
+		return `${m['baby.actions.fed.drank']({ amount: event.amountConsumed!, bottleSize: event.bottleSize! })}`;
 	}
 
-	async function fetchAllEvents() {
-		loading = true;
-		const response = await fetch(`/api/baby/${page.params.id}/event`);
-		const data = await response.json();
-		events = data;
-		loading = false;
-		hasMore = false;
+	async function deleteEvent(event: Event) {
+		try {
+			const response = await fetch(`/api/baby/${$page.params.id}/event/${event.id}`, {
+				method: 'DELETE'
+			});
+			if (response.ok) {
+				const data = await response.json();
+				sortedEvents = events
+					.filter((event) => event.id !== data.id)
+					.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+				toastStatus = true;
+			}
+		} catch (error) {
+			console.error('Error deleting event: ', error);
+		}
 	}
+
+	let toastStatus = $state(false);
+	$effect(() => {
+		if (toastStatus) {
+			setTimeout(() => {
+				toastStatus = false;
+			}, 3000);
+		}
+	});
 </script>
 
 <Card horizontal class={cn('m-3 mx-auto p-3')}>
@@ -72,7 +89,7 @@
 			{m['time.past.entries']()}
 		</Heading>
 
-		{#if sortedEvents.length === 0}
+		{#if events.length === 0}
 			<Heading tag="h6" class={cn('mx-auto text-gray-500')}>
 				{m['time.noEntries']()}
 			</Heading>
@@ -92,24 +109,31 @@
 								</P>
 							{/if}
 							<P class={cn('text-sm text-gray-500')}>
-								{m['time.past.hoursAndMinutes']({
-									hours: getTimeAgo(event.createdAt).hours,
-									minutes: getTimeAgo(event.createdAt).minutes
-								})}
+								{formatEventTime(event)}
 							</P>
 						</div>
+						{#key event.id}
+							<TrashBinOutline
+								class={cn('cursor-pointer dark:text-gray-500 dark:hover:text-gray-200')}
+								onclick={() => deleteEvent(event)}
+							/>
+						{/key}
 					</div>
 				{/each}
-				{#if hasMore}
-					<Button onclick={fetchAllEvents} disabled={loading} class={cn('mx-auto')}>
-						{m['time.past.loadMore']()}
-					</Button>
-				{:else}
-					<P class={cn('text-center text-gray-500')}>
-						{m['time.past.noMoreEntries']()}
-					</P>
-				{/if}
 			</div>
 		{/if}
 	</div>
 </Card>
+<Toast
+	color="green"
+	align
+	class={cn('fixed bottom-1 left-1/2 -translate-1/2 border-[1px] border-gray-700 ')}
+	dismissable={true}
+	params={{ amount: 10 }}
+	bind:toastStatus
+>
+	{#snippet icon()}
+		<BadgeCheckSolid class={cn('dark:text-gray-200')} size="lg" />
+	{/snippet}
+	<P class={cn('text-sm font-normal')}>Event deleted</P>
+</Toast>
